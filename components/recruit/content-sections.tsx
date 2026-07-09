@@ -255,7 +255,7 @@ export function FoundersSection() {
       <div className="relative mx-auto max-w-6xl overflow-visible rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-sm md:p-10">
         <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr]">
           <InViewBlock variants={fadeInUp}>
-            <div className="relative z-0 overflow-visible">
+            <div className="relative z-0 overflow-visible md:-ml-2">
               <FoundersPhoto />
             </div>
           </InViewBlock>
