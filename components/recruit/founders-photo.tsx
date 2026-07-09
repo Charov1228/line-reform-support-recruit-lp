@@ -6,7 +6,7 @@ const FOUNDERS_IMAGE = "/images/founders.png";
 // Original founders card ratio (854 x 856)
 const CARD_ASPECT = "854 / 856";
 // Space for raised hands above the card (matched top/bottom for visual balance)
-const HAND_OVERFLOW = "30%";
+const HAND_OVERFLOW = "10%";
 
 export function FoundersPhoto() {
   return (
