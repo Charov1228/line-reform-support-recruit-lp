@@ -9,6 +9,7 @@ export const recruitSite = {
     placeholderLabel: "実務映像",
     headline: ["人生を変える仕事を、", "ここから。"],
     englishCopy: ["LINE REFORM SUPPORT RECRUIT"],
+    logoOp: "/images/logo-op.png",
   },
   topLead: {
     eyebrow: "RECRUIT SITE",

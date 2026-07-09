@@ -35,18 +35,17 @@ export function OpeningIntro({ onComplete }: OpeningIntroProps) {
       />
       <div className="relative flex flex-col items-center px-6 text-center">
         <motion.div
-          className="rounded-[2rem] bg-white px-8 py-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] md:px-10 md:py-8"
           initial={{ opacity: 0, scale: 0.88, y: 24 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.85, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
           <Image
-            src="/images/logo-reform-support.png"
+            src={recruitSite.hero.logoOp}
             alt={recruitSite.company}
-            width={220}
-            height={96}
+            width={360}
+            height={160}
             priority
-            className="h-16 w-auto md:h-20"
+            className="h-20 w-auto md:h-28"
           />
         </motion.div>
         <motion.p
