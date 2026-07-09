@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronRight, Home, MessageCircleMore, Sparkles, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Building2, GraduationCap, Heart, Home, MessageCircleMore, Shield, Sparkles, Users, X } from "lucide-react";
 import {
   AnimatedSection,
   InViewBlock,
@@ -25,86 +25,116 @@ type Comment = (typeof recruitSite.comments)[number];
 function RequirementBlock({
   title,
   children,
+  showDivider = true,
 }: {
   title: string;
   children: React.ReactNode;
+  showDivider?: boolean;
 }) {
   return (
-    <section>
+    <section className={showDivider ? "border-b border-gray-100 pb-8 last:border-b-0 last:pb-0" : ""}>
       <h4 className="text-sm font-bold text-gray-900">{title}</h4>
       <div className="mt-3">{children}</div>
     </section>
   );
 }
 
-function RequirementDetails({ job }: { job: Requirement }) {
+function SectionGlow() {
   return (
-    <div className="space-y-8 text-sm leading-7 text-gray-600">
-      {job.baseInfo.map(([label, value]) => (
-        <RequirementBlock key={label} title={label}>
-          <p>{value}</p>
-        </RequirementBlock>
-      ))}
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-20 right-0 h-72 w-72 rounded-full bg-red-100/80 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-red-50 blur-3xl"
+      />
+    </>
+  );
+}
 
-      <RequirementBlock title="仕事内容">
-        <p>{job.jobDescription}</p>
-      </RequirementBlock>
-
-      <RequirementBlock title="給与">
-        <p>{job.salary}</p>
-      </RequirementBlock>
-
-      <RequirementBlock title="勤務時間">
-        <p>{job.hours}</p>
-      </RequirementBlock>
-
-      <RequirementBlock title="給与詳細">
+function RequirementDetails({ job }: { job: Requirement }) {
+  const blocks: { title: string; content: React.ReactNode }[] = [
+    ...job.baseInfo.map(([label, value]) => ({
+      title: label,
+      content: <p>{value}</p>,
+    })),
+    { title: "仕事内容", content: <p>{job.jobDescription}</p> },
+    { title: "給与", content: <p>{job.salary}</p> },
+    { title: "勤務時間", content: <p>{job.hours}</p> },
+    {
+      title: "給与詳細",
+      content: (
         <ul className="space-y-1">
           {job.salaryDetails.map((item) => (
             <li key={item}>・{item}</li>
           ))}
         </ul>
-      </RequirementBlock>
-
-      <RequirementBlock title="月収例">
+      ),
+    },
+    {
+      title: "月収例",
+      content: (
         <ul className="space-y-1">
           {job.exampleIncome.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
-      </RequirementBlock>
-
-      <RequirementBlock title="休日・休暇">
+      ),
+    },
+    {
+      title: "休日・休暇",
+      content: (
         <ul className="space-y-1">
           {job.holidays.map((item) => (
             <li key={item}>・{item}</li>
           ))}
         </ul>
-      </RequirementBlock>
-
-      <RequirementBlock title="応募資格">
+      ),
+    },
+    {
+      title: "応募資格",
+      content: (
         <ul className="space-y-1">
           {job.qualifications.map((item) => (
             <li key={item}>・{item}</li>
           ))}
         </ul>
-      </RequirementBlock>
-
-      <RequirementBlock title="福利厚生">
+      ),
+    },
+    {
+      title: "福利厚生",
+      content: (
         <ul className="grid gap-2 md:grid-cols-2">
           {job.benefits.map((item) => (
             <li key={item}>・{item}</li>
           ))}
         </ul>
-      </RequirementBlock>
+      ),
+    },
+  ];
 
-      {"companyInfo" in job && job.companyInfo
-        ? job.companyInfo.map(([label, value]) => (
-            <RequirementBlock key={label} title={label}>
-              <p>{value}</p>
-            </RequirementBlock>
-          ))
-        : null}
+  if ("companyInfo" in job && job.companyInfo) {
+    blocks.push(
+      ...job.companyInfo.map(([label, value]) => ({
+        title: label,
+        content: <p>{value}</p>,
+      })),
+    );
+  }
+
+  return (
+    <div className="space-y-8 text-sm leading-7 text-gray-600">
+      {blocks.map((block, index) => (
+        <RequirementBlock
+          key={block.title}
+          title={block.title}
+          showDivider={index < blocks.length - 1}
+        >
+          {block.content}
+        </RequirementBlock>
+      ))}
     </div>
   );
 }
@@ -218,13 +248,14 @@ export function FoundersSection() {
   return (
     <AnimatedSection
       id="founders"
-      className="bg-gradient-to-b from-red-50/60 to-white px-4 py-20 md:px-8 md:py-32"
+      className="relative overflow-hidden px-4 py-20 md:px-8 md:py-32"
     >
-      <div className="mx-auto max-w-6xl rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm md:p-10">
+      <SectionGlow />
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-sm md:p-10">
         <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr]">
           <InViewBlock variants={fadeInUp}>
             <motion.div
-              className="relative overflow-hidden rounded-[1.75rem] border border-gray-200"
+              className="relative overflow-hidden rounded-[1.75rem] border border-red-100 shadow-md"
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
             >
@@ -275,9 +306,17 @@ export function FoundersSection() {
 }
 
 export function AboutSection() {
+  const pointIcons = [Building2, Shield, GraduationCap] as const;
+  const pointColors = [
+    "from-red-500 to-red-600",
+    "from-rose-500 to-red-500",
+    "from-orange-500 to-red-500",
+  ] as const;
+
   return (
-    <AnimatedSection id="about" className="px-4 py-20 md:px-8 md:py-32">
-      <div className="mx-auto max-w-6xl">
+    <AnimatedSection id="about" className="relative overflow-hidden px-4 py-20 md:px-8 md:py-32">
+      <SectionGlow />
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-sm md:p-10">
         <InViewBlock variants={fadeInUp}>
           <SectionHeading
             label="About Us"
@@ -289,19 +328,33 @@ export function AboutSection() {
           </div>
         </InViewBlock>
         <div className="mt-10 space-y-4">
-          {recruitSite.about.points.map((point, index) => (
-            <ScrollReveal key={point.title} variants={slideInLeft}>
-              <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm md:p-6">
-                <p className="text-xs font-semibold tracking-[0.3em] text-red-600 uppercase">
-                  Point {index + 1}
-                </p>
-                <h3 className="mt-2 text-lg font-bold text-gray-900">{point.title}</h3>
-                <p className="mt-2 text-sm leading-7 text-gray-600 md:text-base">
-                  {point.description}
-                </p>
-              </div>
-            </ScrollReveal>
-          ))}
+          {recruitSite.about.points.map((point, index) => {
+            const Icon = pointIcons[index] ?? Building2;
+            const color = pointColors[index] ?? pointColors[0];
+
+            return (
+              <ScrollReveal key={point.title} variants={slideInLeft}>
+                <div className="relative overflow-hidden rounded-3xl border border-white bg-white/90 p-5 shadow-[0_16px_40px_rgba(217,43,52,0.08)] md:p-6">
+                  <div className="relative z-10 flex gap-4">
+                    <div
+                      className={`flex size-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${color} text-white shadow-md`}
+                    >
+                      <Icon className="size-6" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold tracking-[0.3em] text-red-600 uppercase">
+                        Point {index + 1}
+                      </p>
+                      <h3 className="mt-2 text-lg font-bold text-gray-900">{point.title}</h3>
+                      <p className="mt-2 text-sm leading-7 text-gray-600 md:text-base">
+                        {point.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </AnimatedSection>
@@ -316,6 +369,8 @@ export function JobsRequirementsSection() {
       const hash = window.location.hash.replace("#", "");
       if (hash.startsWith("requirement-")) {
         setExpandedSlug(hash.replace("requirement-", ""));
+      } else if (hash === "requirements") {
+        setExpandedSlug(null);
       }
     };
     openFromHash();
@@ -323,16 +378,32 @@ export function JobsRequirementsSection() {
     return () => window.removeEventListener("hashchange", openFromHash);
   }, []);
 
+  const scrollToJobCard = (slug: string) => {
+    window.setTimeout(() => {
+      document.getElementById(`job-card-${slug}`)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 480);
+  };
+
+  const openJob = (slug: string) => {
+    setExpandedSlug(slug);
+    window.history.replaceState(null, "", `#requirement-${slug}`);
+  };
+
+  const closeJob = (slug: string) => {
+    setExpandedSlug(null);
+    window.history.replaceState(null, "", "#requirements");
+    scrollToJobCard(slug);
+  };
+
   const toggleJob = (slug: string) => {
-    setExpandedSlug((current) => {
-      const next = current === slug ? null : slug;
-      if (next) {
-        window.history.replaceState(null, "", `#requirement-${next}`);
-      } else {
-        window.history.replaceState(null, "", "#requirements");
-      }
-      return next;
-    });
+    if (expandedSlug === slug) {
+      closeJob(slug);
+      return;
+    }
+    openJob(slug);
   };
 
   return (
@@ -361,12 +432,11 @@ export function JobsRequirementsSection() {
             return (
               <div
                 key={job.slug}
-                className={isExpanded ? "md:col-span-3" : ""}
+                id={`job-card-${job.slug}`}
+                className={`scroll-mt-28 ${isExpanded ? "md:col-span-3" : ""}`}
               >
                 <motion.article
-                  layout
-                  id={`requirement-${job.slug}`}
-                  className={`scroll-mt-28 overflow-hidden rounded-[1.75rem] border bg-white shadow-sm transition-colors ${
+                  className={`overflow-hidden rounded-[1.75rem] border bg-white shadow-sm transition-colors ${
                     isExpanded
                       ? "border-red-300 shadow-md"
                       : "border-gray-200 hover:border-red-200 hover:shadow-md"
@@ -444,7 +514,10 @@ export function JobsRequirementsSection() {
                           </div>
                           <button
                             type="button"
-                            onClick={() => toggleJob(job.slug)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              closeJob(job.slug);
+                            }}
                             className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-gray-50 px-6 py-4 text-sm font-semibold text-gray-900 transition hover:border-red-200 hover:bg-red-50"
                           >
                             <ChevronDown className="size-4 text-red-600" />
@@ -465,6 +538,13 @@ export function JobsRequirementsSection() {
 }
 
 export function AppealSection() {
+  const appealIcons = [Building2, Users, Heart] as const;
+  const appealColors = [
+    "from-red-500 to-red-600",
+    "from-rose-500 to-red-500",
+    "from-orange-500 to-red-500",
+  ] as const;
+
   return (
     <AnimatedSection className="relative overflow-hidden px-4 py-20 md:px-8 md:py-32">
       <div className="absolute inset-0">
@@ -476,7 +556,8 @@ export function AppealSection() {
         />
         <div className="absolute inset-0 bg-white/88" />
       </div>
-      <div className="relative mx-auto max-w-6xl">
+      <SectionGlow />
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50/80 via-white/90 to-white/90 p-6 shadow-sm backdrop-blur-sm md:p-10">
         <InViewBlock variants={fadeInUp}>
           <SectionHeading
             label="Why Join"
@@ -485,14 +566,24 @@ export function AppealSection() {
           />
         </InViewBlock>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {recruitSite.appeal.items.map((item) => (
-            <ScrollReveal key={item.title} variants={slideInRight}>
-              <div className="rounded-[1.75rem] border border-gray-200 bg-white/90 p-6 shadow-sm backdrop-blur-sm">
-                <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-gray-600">{item.description}</p>
-              </div>
-            </ScrollReveal>
-          ))}
+          {recruitSite.appeal.items.map((item, index) => {
+            const Icon = appealIcons[index] ?? Heart;
+            const color = appealColors[index] ?? appealColors[0];
+
+            return (
+              <ScrollReveal key={item.title} variants={slideInRight}>
+                <div className="relative h-full overflow-hidden rounded-[1.75rem] border border-white bg-white/90 p-6 shadow-[0_16px_40px_rgba(217,43,52,0.08)]">
+                  <div
+                    className={`inline-flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br ${color} text-white shadow-md`}
+                  >
+                    <Icon className="size-6" />
+                  </div>
+                  <h3 className="mt-5 text-xl font-bold text-gray-900">{item.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-gray-600">{item.description}</p>
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </AnimatedSection>
@@ -509,30 +600,8 @@ export function BeginnerSection() {
 
   return (
     <AnimatedSection className="relative overflow-hidden px-4 py-20 md:px-8 md:py-32">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-20 right-0 h-72 w-72 rounded-full bg-red-100/80 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-red-50 blur-3xl"
-      />
+      <SectionGlow />
       <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-sm md:p-10">
-        <div className="pointer-events-none absolute -right-8 -top-8 hidden opacity-20 md:block">
-          <svg width="220" height="220" viewBox="0 0 220 220" fill="none" aria-hidden>
-            <circle cx="110" cy="110" r="90" stroke="#D92B34" strokeWidth="2" strokeDasharray="8 10" />
-            <circle cx="110" cy="110" r="58" fill="#FEE2E2" />
-            <path
-              d="M78 126c10-24 54-24 64 0"
-              stroke="#D92B34"
-              strokeWidth="4"
-              strokeLinecap="round"
-            />
-            <circle cx="88" cy="98" r="7" fill="#D92B34" />
-            <circle cx="132" cy="98" r="7" fill="#D92B34" />
-          </svg>
-        </div>
-
         <InViewBlock variants={fadeInUp}>
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <SectionHeading
@@ -562,19 +631,21 @@ export function BeginnerSection() {
               <ScrollReveal key={reason.title} variants={fadeInUp}>
                 <div className="group relative h-full overflow-hidden rounded-[1.5rem] border border-white bg-white/90 p-6 shadow-[0_16px_40px_rgba(217,43,52,0.08)] transition hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(217,43,52,0.12)]">
                   <div
-                    className={`inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${color} text-white shadow-md`}
-                  >
-                    <Icon className="size-7" />
-                  </div>
-                  <p className="mt-5 text-xs font-semibold tracking-[0.28em] text-red-500 uppercase">
-                    Point {index + 1}
-                  </p>
-                  <h3 className="mt-2 text-lg font-bold text-gray-900">{reason.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-gray-600">{reason.description}</p>
-                  <div
                     aria-hidden
-                    className="absolute -bottom-6 -right-6 size-24 rounded-full bg-red-50 transition group-hover:bg-red-100"
+                    className="pointer-events-none absolute -bottom-6 -right-6 z-0 size-24 rounded-full bg-red-50 transition group-hover:bg-red-100"
                   />
+                  <div className="relative z-10">
+                    <div
+                      className={`inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${color} text-white shadow-md`}
+                    >
+                      <Icon className="size-7" />
+                    </div>
+                    <p className="mt-5 text-xs font-semibold tracking-[0.28em] text-red-500 uppercase">
+                      Point {index + 1}
+                    </p>
+                    <h3 className="mt-2 text-lg font-bold text-gray-900">{reason.title}</h3>
+                    <p className="mt-4 text-sm leading-7 text-gray-600">{reason.description}</p>
+                  </div>
                 </div>
               </ScrollReveal>
             );
