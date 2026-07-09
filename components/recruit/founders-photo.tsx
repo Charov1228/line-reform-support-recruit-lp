@@ -3,27 +3,33 @@ import { motion } from "framer-motion";
 
 const FOUNDERS_IMAGE = "/images/founders.png";
 
+// Original founders card ratio (854 x 856)
+const CARD_ASPECT = "854 / 856";
+
 export function FoundersPhoto() {
   return (
     <motion.div
-      className="relative mx-auto w-full max-w-[420px] overflow-visible"
+      className="relative w-full overflow-visible"
       animate={{ y: [0, 8, 0] }}
       transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
     >
-      <div className="relative overflow-visible pb-1 pt-12">
-        <div className="relative aspect-[3/4] w-full">
+      <div className="relative overflow-visible pt-[38%]">
+        <div
+          className="relative w-full overflow-visible"
+          style={{ aspectRatio: CARD_ASPECT }}
+        >
           <div
             aria-hidden
-            className="absolute inset-0 rounded-[1.75rem] border border-red-100 bg-white shadow-[0_18px_40px_rgba(217,43,52,0.12)]"
+            className="absolute inset-0 z-0 rounded-[1.75rem] border border-red-100 bg-white shadow-[0_18px_40px_rgba(217,43,52,0.12)]"
           />
 
-          <div className="absolute -top-[18%] right-0 bottom-0 left-0 z-10 overflow-visible">
+          <div className="absolute bottom-0 left-1/2 z-10 aspect-[1024/682] w-[195%] max-w-none -translate-x-1/2 overflow-visible">
             <Image
               src={FOUNDERS_IMAGE}
               alt="けーさんとたろー"
               fill
-              className="object-contain object-bottom [filter:drop-shadow(0_14px_22px_rgba(15,23,42,0.2))]"
-              sizes="(max-width: 768px) 92vw, 420px"
+              className="object-contain object-bottom [filter:drop-shadow(0_16px_24px_rgba(15,23,42,0.22))]"
+              sizes="(max-width: 768px) 92vw, 520px"
               priority
             />
           </div>
