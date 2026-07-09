@@ -1,0 +1,690 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, ChevronRight, MessageCircleMore, X } from "lucide-react";
+import {
+  AnimatedSection,
+  InViewBlock,
+  ScrollReveal,
+} from "@/components/recruit/animated-section";
+import { LineCtaButton } from "@/components/recruit/line-cta-button";
+import { SectionHeading } from "@/components/recruit/section-heading";
+import {
+  fadeIn,
+  fadeInUp,
+  scaleIn,
+  slideInLeft,
+  slideInRight,
+} from "@/lib/animations";
+import { recruitSite } from "@/lib/recruit-data";
+
+type Requirement = (typeof recruitSite.requirements)[number];
+type Comment = (typeof recruitSite.comments)[number];
+
+function ChipList({ items }: { items: readonly string[] }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <span
+          key={item}
+          className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs text-gray-700 md:text-sm"
+        >
+          {item}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function RequirementBlock({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <h4 className="text-sm font-bold text-gray-900">{title}</h4>
+      <div className="mt-3">{children}</div>
+    </section>
+  );
+}
+
+function RequirementDetails({ job }: { job: Requirement }) {
+  return (
+    <div className="space-y-8 border-t border-gray-100 pt-8 text-sm leading-7 text-gray-600">
+      <RequirementBlock title="基本情報">
+        <dl className="space-y-3">
+          {job.baseInfo.map(([label, value]) => (
+            <div key={label}>
+              <dt className="text-gray-400">{label}</dt>
+              <dd className="mt-1">{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </RequirementBlock>
+
+      <RequirementBlock title="仕事内容">
+        <p>{job.jobDescription}</p>
+      </RequirementBlock>
+
+      <RequirementBlock title="給与">
+        <p>{job.salary}</p>
+      </RequirementBlock>
+
+      <RequirementBlock title="勤務時間">
+        <p>{job.hours}</p>
+      </RequirementBlock>
+
+      <RequirementBlock title="給与詳細">
+        <ul className="space-y-1">
+          {job.salaryDetails.map((item) => (
+            <li key={item}>・{item}</li>
+          ))}
+        </ul>
+      </RequirementBlock>
+
+      <RequirementBlock title="月収例">
+        <ul className="space-y-1">
+          {job.exampleIncome.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </RequirementBlock>
+
+      <RequirementBlock title="休日・休暇">
+        <ul className="space-y-1">
+          {job.holidays.map((item) => (
+            <li key={item}>・{item}</li>
+          ))}
+        </ul>
+      </RequirementBlock>
+
+      <RequirementBlock title="応募資格">
+        <ul className="space-y-1">
+          {job.qualifications.map((item) => (
+            <li key={item}>・{item}</li>
+          ))}
+        </ul>
+      </RequirementBlock>
+
+      <RequirementBlock title="福利厚生">
+        <ul className="grid gap-2 md:grid-cols-2">
+          {job.benefits.map((item) => (
+            <li key={item}>・{item}</li>
+          ))}
+        </ul>
+      </RequirementBlock>
+
+      {"companyInfo" in job && job.companyInfo ? (
+        <RequirementBlock title="会社情報">
+          <dl className="space-y-3">
+            {job.companyInfo.map(([label, value]) => (
+              <div key={label}>
+                <dt className="text-gray-400">{label}</dt>
+                <dd className="mt-1">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </RequirementBlock>
+      ) : null}
+    </div>
+  );
+}
+
+function CommentModal({
+  comment,
+  onClose,
+}: {
+  comment: Comment;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[70] flex items-end justify-center bg-black/55 p-4 backdrop-blur-sm md:items-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="comment-modal-title"
+        className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-gray-200 bg-white p-6 shadow-2xl md:p-8"
+        initial={{ opacity: 0, y: 40, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 24, scale: 0.98 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl border border-gray-200">
+              <Image
+                src={comment.image}
+                alt={`${comment.position} ${comment.name}`}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <p className="text-xs tracking-[0.24em] text-red-600 uppercase">
+                Staff Voice
+              </p>
+              <p className="mt-1 text-sm text-gray-500">{comment.position}</p>
+              <h3 id="comment-modal-title" className="text-xl font-bold text-gray-900">
+                {comment.name}
+              </h3>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-gray-200 p-2 text-gray-500 transition hover:bg-gray-50 hover:text-gray-900"
+            aria-label="閉じる"
+          >
+            <X className="size-5" />
+          </button>
+        </div>
+        <p className="mt-6 text-xl font-bold text-gray-900">{comment.title}</p>
+        <div className="mt-4 space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
+          {comment.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export function CtaBannerSection() {
+  return (
+    <AnimatedSection className="relative overflow-hidden bg-gray-50 px-4 py-8 md:px-8 md:py-10">
+      <InViewBlock variants={fadeInUp}>
+        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 rounded-[2rem] border border-red-200 bg-gradient-to-r from-red-700 via-red-600 to-red-800 p-6 shadow-[0_24px_80px_rgba(127,29,29,0.18)] md:flex-row md:items-center md:justify-between md:p-8">
+          <div>
+            <p className="text-sm font-semibold tracking-[0.35em] text-red-100 uppercase">
+              Line Entry
+            </p>
+            <h2 className="mt-3 text-2xl font-bold text-white md:text-3xl">
+              LINEから、まずは気軽に応募。
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/80 md:text-base">
+              私たちと一緒に働きませんか？公式LINEから、ご応募をお待ちしております。
+            </p>
+          </div>
+          <LineCtaButton
+            label="LINEで無料相談する"
+            sublabel="無料でご相談いただけます"
+            location="cta-banner"
+          />
+        </div>
+      </InViewBlock>
+    </AnimatedSection>
+  );
+}
+
+export function FoundersSection() {
+  return (
+    <AnimatedSection
+      id="founders"
+      className="bg-gradient-to-b from-red-50/60 to-white px-4 py-20 md:px-8 md:py-32"
+    >
+      <div className="mx-auto grid max-w-6xl gap-10 rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm md:grid-cols-[0.9fr_1.1fr] md:p-10">
+        <InViewBlock variants={fadeIn}>
+          <motion.div
+            className="relative overflow-hidden rounded-[1.75rem] border border-gray-200"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Image
+              src={recruitSite.founders.image}
+              alt="けーさんとたろー"
+              width={854}
+              height={855}
+              className="h-full w-full object-cover"
+            />
+          </motion.div>
+        </InViewBlock>
+        <InViewBlock variants={fadeIn} delay={0.15}>
+          <div className="flex flex-col justify-center">
+            <SectionHeading
+              label={recruitSite.founders.label}
+              title={recruitSite.founders.title}
+              description={recruitSite.founders.role}
+            />
+            <div className="mt-6 space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
+              {recruitSite.founders.description.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        </InViewBlock>
+      </div>
+    </AnimatedSection>
+  );
+}
+
+export function AboutSection() {
+  return (
+    <AnimatedSection id="about" className="px-4 py-20 md:px-8 md:py-32">
+      <div className="mx-auto max-w-6xl">
+        <InViewBlock variants={fadeInUp}>
+          <SectionHeading
+            label="About Us"
+            title={recruitSite.about.heading}
+            description={recruitSite.about.description}
+          />
+        </InViewBlock>
+        <div className="mt-10 space-y-4">
+          {recruitSite.about.points.map((point, index) => (
+            <ScrollReveal key={point.title} variants={slideInLeft}>
+              <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm md:p-6">
+                <p className="text-xs font-semibold tracking-[0.3em] text-red-600 uppercase">
+                  Point {index + 1}
+                </p>
+                <h3 className="mt-2 text-lg font-bold text-gray-900">{point.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-gray-600 md:text-base">
+                  {point.description}
+                </p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </div>
+    </AnimatedSection>
+  );
+}
+
+export function JobsRequirementsSection() {
+  const [expandedSlug, setExpandedSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    const openFromHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash.startsWith("requirement-")) {
+        setExpandedSlug(hash.replace("requirement-", ""));
+      }
+    };
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, []);
+
+  const toggleJob = (slug: string) => {
+    setExpandedSlug((current) => {
+      const next = current === slug ? null : slug;
+      if (next) {
+        window.history.replaceState(null, "", `#requirement-${next}`);
+      } else {
+        window.history.replaceState(null, "", "#requirements");
+      }
+      return next;
+    });
+  };
+
+  return (
+    <AnimatedSection
+      id="requirements"
+      className="scroll-mt-28 bg-gray-50 px-4 py-20 md:px-8 md:py-32"
+    >
+      <div className="mx-auto max-w-6xl">
+        <InViewBlock variants={fadeInUp}>
+          <SectionHeading
+            label="Our Jobs"
+            title="募集要項"
+            description={recruitSite.requirementsIntro}
+          />
+        </InViewBlock>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {recruitSite.jobs.map((job) => {
+            const requirement = recruitSite.requirements.find(
+              (item) => item.id === job.slug,
+            );
+            const isExpanded = expandedSlug === job.slug;
+
+            if (!requirement) return null;
+
+            return (
+              <div
+                key={job.slug}
+                className={isExpanded ? "md:col-span-3" : ""}
+              >
+                <motion.article
+                  layout
+                  id={`requirement-${job.slug}`}
+                  className={`scroll-mt-28 overflow-hidden rounded-[1.75rem] border bg-white shadow-sm transition-colors ${
+                    isExpanded
+                      ? "border-red-300 shadow-md"
+                      : "border-gray-200 hover:border-red-200 hover:shadow-md"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggleJob(job.slug)}
+                    className="w-full p-6 text-left"
+                    aria-expanded={isExpanded}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold tracking-[0.28em] text-red-600 uppercase">
+                          {job.accent}
+                        </p>
+                        <h3 className="mt-4 text-2xl font-bold text-gray-900">
+                          {job.title}
+                        </h3>
+                        <p className="mt-4 text-sm leading-7 text-gray-600">
+                          {job.description}
+                        </p>
+                        <dl className="mt-6 space-y-3 text-sm text-gray-700">
+                          <div className="flex items-start justify-between gap-3 border-t border-gray-100 pt-3">
+                            <dt className="text-gray-400">勤務地</dt>
+                            <dd>{job.location}</dd>
+                          </div>
+                          <div className="flex items-start justify-between gap-3 border-t border-gray-100 pt-3">
+                            <dt className="text-gray-400">雇用形態</dt>
+                            <dd>{job.employment}</dd>
+                          </div>
+                        </dl>
+                      </div>
+                      <div className="flex shrink-0 flex-col items-center gap-2 pt-1">
+                        <span
+                          className={`rounded-full border p-2 transition ${
+                            isExpanded
+                              ? "border-red-200 bg-red-50 text-red-600"
+                              : "border-gray-200 text-gray-400"
+                          }`}
+                        >
+                          {isExpanded ? (
+                            <ChevronDown className="size-5" />
+                          ) : (
+                            <ChevronRight className="size-5" />
+                          )}
+                        </span>
+                        <span className="text-xs font-semibold text-red-600">
+                          {isExpanded ? "閉じる" : "詳細"}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isExpanded ? (
+                      <motion.div
+                        key="details"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="border-t border-gray-100 px-6 pb-8">
+                          <div className="flex flex-col gap-4 pt-6 md:flex-row md:items-center md:justify-between">
+                            <ChipList items={requirement.employment} />
+                            <LineCtaButton
+                              label="この職種でLINE相談する"
+                              location={`job-${job.slug}`}
+                              className="px-5 py-3 text-sm"
+                            />
+                          </div>
+                          <RequirementDetails job={requirement} />
+                        </div>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+                </motion.article>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </AnimatedSection>
+  );
+}
+
+export function AppealSection() {
+  return (
+    <AnimatedSection className="relative overflow-hidden px-4 py-20 md:px-8 md:py-32">
+      <div className="absolute inset-0">
+        <Image
+          src={recruitSite.appeal.backgroundImage}
+          alt="LINEで働く人々"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-white/88" />
+      </div>
+      <div className="relative mx-auto max-w-6xl">
+        <InViewBlock variants={fadeInUp}>
+          <SectionHeading
+            label="Why Join"
+            title="この仕事の魅力"
+            description={recruitSite.appeal.description}
+          />
+        </InViewBlock>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {recruitSite.appeal.items.map((item) => (
+            <ScrollReveal key={item.title} variants={slideInRight}>
+              <div className="rounded-[1.75rem] border border-gray-200 bg-white/90 p-6 shadow-sm backdrop-blur-sm">
+                <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-gray-600">{item.description}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </div>
+    </AnimatedSection>
+  );
+}
+
+export function BeginnerSection() {
+  return (
+    <AnimatedSection className="px-4 py-20 md:px-8 md:py-32">
+      <div className="mx-auto max-w-6xl rounded-[2rem] border border-gray-200 bg-gray-50 p-6 md:p-10">
+        <InViewBlock variants={fadeInUp}>
+          <SectionHeading
+            label="For Beginner"
+            title="未経験でも安心な理由"
+            description={recruitSite.beginner.description}
+          />
+        </InViewBlock>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {recruitSite.beginner.reasons.map((reason) => (
+            <ScrollReveal key={reason.title} variants={fadeInUp}>
+              <div className="h-full rounded-[1.5rem] border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                <h3 className="text-lg font-bold text-gray-900">{reason.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-gray-600">{reason.description}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </div>
+    </AnimatedSection>
+  );
+}
+
+export function CommentsSection() {
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
+  const uniqueComments = recruitSite.comments;
+
+  return (
+    <AnimatedSection className="overflow-hidden bg-gray-50 px-4 py-20 md:px-8 md:py-32">
+      <div className="mx-auto max-w-6xl">
+        <InViewBlock variants={fadeInUp}>
+          <SectionHeading
+            label="Voices"
+            title="社員・スタッフコメント"
+            description={recruitSite.voices.description}
+          />
+          <p className="mt-3 text-sm text-gray-500">タップして全文を読む</p>
+        </InViewBlock>
+        <div className="mt-10 overflow-hidden">
+          <motion.div
+            className="flex w-max gap-5"
+            animate={
+              selectedComment ? undefined : { x: ["0%", "-50%"] }
+            }
+            transition={
+              selectedComment
+                ? { duration: 0 }
+                : { duration: 40, repeat: Infinity, ease: "linear" }
+            }
+          >
+            {[...uniqueComments, ...uniqueComments].map((comment, index) => (
+              <button
+                key={`${comment.name}-${index}`}
+                type="button"
+                onClick={() => setSelectedComment(comment)}
+                className="w-[85vw] max-w-[32rem] shrink-0 cursor-pointer rounded-[2rem] border border-gray-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-red-200 hover:shadow-md md:p-6"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="relative h-[72px] w-[72px] overflow-hidden rounded-2xl border border-gray-200">
+                    <Image
+                      src={comment.image}
+                      alt={`${comment.position} ${comment.name}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-xs tracking-[0.24em] text-red-600 uppercase">
+                      Staff Voice
+                    </p>
+                    <p className="mt-1 text-sm text-gray-500">{comment.position}</p>
+                    <h3 className="text-xl font-bold text-gray-900">{comment.name}</h3>
+                  </div>
+                </div>
+                <p className="mt-5 text-xl font-bold text-gray-900">{comment.title}</p>
+                <p className="mt-4 line-clamp-3 text-sm leading-7 text-gray-600">
+                  {comment.body[0]}
+                </p>
+                <p className="mt-4 text-sm font-semibold text-red-600">続きを読む</p>
+              </button>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {selectedComment ? (
+          <CommentModal
+            comment={selectedComment}
+            onClose={() => setSelectedComment(null)}
+          />
+        ) : null}
+      </AnimatePresence>
+    </AnimatedSection>
+  );
+}
+
+export function FlowSection() {
+  return (
+    <AnimatedSection className="bg-gray-50 px-4 py-20 md:px-8 md:py-32">
+      <div className="mx-auto max-w-6xl">
+        <InViewBlock variants={fadeInUp}>
+          <SectionHeading
+            label="Entry Flow"
+            title="応募の流れ"
+            description={recruitSite.flowIntro}
+          />
+        </InViewBlock>
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {recruitSite.flow.map((step) => (
+            <ScrollReveal key={step.step} variants={fadeInUp}>
+              <div className="h-full rounded-[1.75rem] border border-gray-200 bg-white p-6 shadow-sm">
+                <p className="text-4xl font-black text-red-200">{step.step}</p>
+                <h3 className="mt-4 text-xl font-bold text-gray-900">{step.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-gray-600">{step.description}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </div>
+    </AnimatedSection>
+  );
+}
+
+export function FaqSection() {
+  return (
+    <AnimatedSection id="faq" className="px-4 py-20 md:px-8 md:py-32">
+      <div className="mx-auto max-w-4xl">
+        <InViewBlock variants={fadeInUp}>
+          <SectionHeading
+            label="FAQ"
+            title="よくある質問"
+            description="応募前に気になることを先回りして解消できるよう、よくある疑問をまとめています。"
+            align="center"
+          />
+        </InViewBlock>
+        <div className="mt-10 space-y-4">
+          {recruitSite.faq.map((item) => (
+            <ScrollReveal key={item.question} variants={scaleIn}>
+              <div className="rounded-[1.5rem] border border-gray-200 bg-white p-5 shadow-sm md:p-6">
+                <div className="flex items-start gap-3">
+                  <MessageCircleMore className="mt-1 size-5 shrink-0 text-red-600" />
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">{item.question}</h3>
+                    <p className="mt-3 text-sm leading-7 text-gray-600">{item.answer}</p>
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </div>
+    </AnimatedSection>
+  );
+}
+
+export function FinalCtaSection() {
+  return (
+    <AnimatedSection className="px-4 pt-20 pb-28 md:px-8 md:pt-32 md:pb-36">
+      <InViewBlock variants={fadeIn}>
+        <div className="mx-auto max-w-4xl rounded-[2rem] border border-red-200 bg-gradient-to-br from-red-700 via-red-600 to-red-800 p-6 text-center shadow-[0_24px_80px_rgba(127,29,29,0.2)] md:p-12">
+          <SectionHeading
+            title={recruitSite.finalCta.title}
+            description={`${recruitSite.finalCta.subtitle} ${recruitSite.finalCta.body}`}
+            align="center"
+            light
+          />
+          <div className="mt-10 flex flex-col items-center gap-6">
+            <LineCtaButton
+              label="LINEで無料相談する"
+              sublabel="まずは気軽にお問い合わせください"
+              location="final-cta"
+            />
+            <div className="flex flex-col items-center rounded-[1.75rem] border border-white/20 bg-black/10 p-6">
+              <Image
+                src="/images/line-qr.png"
+                alt="公式LINE QRコード"
+                width={160}
+                height={160}
+                className="rounded-2xl bg-white p-2"
+              />
+              <p className="mt-4 text-sm leading-7 text-white/80">
+                PCからでもスマホからでも、LINEで気軽に応募・問い合わせできます。
+              </p>
+            </div>
+          </div>
+        </div>
+      </InViewBlock>
+    </AnimatedSection>
+  );
+}
