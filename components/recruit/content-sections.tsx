@@ -460,10 +460,12 @@ export function JobsRequirementsSection() {
                           {job.description}
                         </p>
                         <div className="mt-6 space-y-4 text-sm leading-7 text-gray-600">
-                          <div>
-                            <p className="font-bold text-gray-900">勤務地</p>
-                            <p className="mt-1">{job.location}</p>
-                          </div>
+                          {!isExpanded ? (
+                            <div>
+                              <p className="font-bold text-gray-900">勤務地</p>
+                              <p className="mt-1">{job.location}</p>
+                            </div>
+                          ) : null}
                           <div>
                             <p className="font-bold text-gray-900">雇用形態</p>
                             <p className="mt-1">{job.employment}</p>
