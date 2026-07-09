@@ -9,6 +9,7 @@ import {
   InViewBlock,
   ScrollReveal,
 } from "@/components/recruit/animated-section";
+import { FoundersPhoto } from "@/components/recruit/founders-photo";
 import { LineCtaButton } from "@/components/recruit/line-cta-button";
 import { SectionHeading } from "@/components/recruit/section-heading";
 import {
@@ -248,28 +249,18 @@ export function FoundersSection() {
   return (
     <AnimatedSection
       id="founders"
-      className="relative overflow-hidden px-4 py-20 md:px-8 md:py-32"
+      className="relative overflow-visible px-4 py-20 md:px-8 md:py-32"
     >
       <SectionGlow />
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-sm md:p-10">
+      <div className="relative mx-auto max-w-6xl overflow-visible rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-sm md:p-10">
         <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr]">
           <InViewBlock variants={fadeInUp}>
-            <motion.div
-              className="relative overflow-hidden rounded-[1.75rem] border border-red-100 shadow-md"
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Image
-                src={recruitSite.founders.image}
-                alt="けーさんとたろー"
-                width={854}
-                height={855}
-                className="h-full w-full object-cover"
-              />
-            </motion.div>
+            <div className="relative z-0 overflow-visible">
+              <FoundersPhoto />
+            </div>
           </InViewBlock>
           <InViewBlock variants={fadeInUp} delay={0.15}>
-            <div className="flex flex-col justify-center">
+            <div className="relative z-20 flex flex-col justify-center">
               <SectionHeading
                 label={recruitSite.founders.label}
                 title={recruitSite.founders.title}

@@ -25,7 +25,7 @@ export const recruitSite = {
       "総フォロワー数は260万人を超え、",
       "SNSでも注目を集める大人気動画クリエイターです。",
     ],
-    image: "/images/founders.png",
+    image: "/images/founders.jpg",
     youtubeUrl: "https://www.youtube.com/@kesantotaro",
   },
   about: {
