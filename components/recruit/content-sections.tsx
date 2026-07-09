@@ -12,7 +12,6 @@ import {
 import { LineCtaButton } from "@/components/recruit/line-cta-button";
 import { SectionHeading } from "@/components/recruit/section-heading";
 import {
-  fadeIn,
   fadeInUp,
   scaleIn,
   slideInLeft,
@@ -22,21 +21,6 @@ import { recruitSite } from "@/lib/recruit-data";
 
 type Requirement = (typeof recruitSite.requirements)[number];
 type Comment = (typeof recruitSite.comments)[number];
-
-function ChipList({ items }: { items: readonly string[] }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {items.map((item) => (
-        <span
-          key={item}
-          className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs text-gray-700 md:text-sm"
-        >
-          {item}
-        </span>
-      ))}
-    </div>
-  );
-}
 
 function RequirementBlock({
   title,
@@ -55,17 +39,12 @@ function RequirementBlock({
 
 function RequirementDetails({ job }: { job: Requirement }) {
   return (
-    <div className="space-y-8 border-t border-gray-100 pt-8 text-sm leading-7 text-gray-600">
-      <RequirementBlock title="基本情報">
-        <dl className="space-y-3">
-          {job.baseInfo.map(([label, value]) => (
-            <div key={label}>
-              <dt className="text-gray-400">{label}</dt>
-              <dd className="mt-1">{value}</dd>
-            </div>
-          ))}
-        </dl>
-      </RequirementBlock>
+    <div className="space-y-8 text-sm leading-7 text-gray-600">
+      {job.baseInfo.map(([label, value]) => (
+        <RequirementBlock key={label} title={label}>
+          <p>{value}</p>
+        </RequirementBlock>
+      ))}
 
       <RequirementBlock title="仕事内容">
         <p>{job.jobDescription}</p>
@@ -119,18 +98,13 @@ function RequirementDetails({ job }: { job: Requirement }) {
         </ul>
       </RequirementBlock>
 
-      {"companyInfo" in job && job.companyInfo ? (
-        <RequirementBlock title="会社情報">
-          <dl className="space-y-3">
-            {job.companyInfo.map(([label, value]) => (
-              <div key={label}>
-                <dt className="text-gray-400">{label}</dt>
-                <dd className="mt-1">{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </RequirementBlock>
-      ) : null}
+      {"companyInfo" in job && job.companyInfo
+        ? job.companyInfo.map(([label, value]) => (
+            <RequirementBlock key={label} title={label}>
+              <p>{value}</p>
+            </RequirementBlock>
+          ))
+        : null}
     </div>
   );
 }
@@ -246,36 +220,55 @@ export function FoundersSection() {
       id="founders"
       className="bg-gradient-to-b from-red-50/60 to-white px-4 py-20 md:px-8 md:py-32"
     >
-      <div className="mx-auto grid max-w-6xl gap-10 rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm md:grid-cols-[0.9fr_1.1fr] md:p-10">
-        <InViewBlock variants={fadeIn}>
-          <motion.div
-            className="relative overflow-hidden rounded-[1.75rem] border border-gray-200"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+      <div className="mx-auto max-w-6xl rounded-[2rem] border border-gray-200 bg-white p-6 shadow-sm md:p-10">
+        <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr]">
+          <InViewBlock variants={fadeInUp}>
+            <motion.div
+              className="relative overflow-hidden rounded-[1.75rem] border border-gray-200"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Image
+                src={recruitSite.founders.image}
+                alt="けーさんとたろー"
+                width={854}
+                height={855}
+                className="h-full w-full object-cover"
+              />
+            </motion.div>
+          </InViewBlock>
+          <InViewBlock variants={fadeInUp} delay={0.15}>
+            <div className="flex flex-col justify-center">
+              <SectionHeading
+                label={recruitSite.founders.label}
+                title={recruitSite.founders.title}
+                description={recruitSite.founders.role}
+              />
+              <div className="mt-6 space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
+                {recruitSite.founders.description.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          </InViewBlock>
+        </div>
+        <div className="mt-8 border-t border-gray-100 pt-6">
+          <a
+            href={recruitSite.founders.youtubeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 rounded-2xl border border-gray-200 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-900 transition hover:border-red-200 hover:bg-red-50"
           >
             <Image
-              src={recruitSite.founders.image}
-              alt="けーさんとたろー"
-              width={854}
-              height={855}
-              className="h-full w-full object-cover"
+              src="/images/youtube.png"
+              alt="YouTube"
+              width={40}
+              height={28}
+              className="h-7 w-auto"
             />
-          </motion.div>
-        </InViewBlock>
-        <InViewBlock variants={fadeIn} delay={0.15}>
-          <div className="flex flex-col justify-center">
-            <SectionHeading
-              label={recruitSite.founders.label}
-              title={recruitSite.founders.title}
-              description={recruitSite.founders.role}
-            />
-            <div className="mt-6 space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
-              {recruitSite.founders.description.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-          </div>
-        </InViewBlock>
+            YouTube
+          </a>
+        </div>
       </div>
     </AnimatedSection>
   );
@@ -289,8 +282,12 @@ export function AboutSection() {
           <SectionHeading
             label="About Us"
             title={recruitSite.about.heading}
-            description={recruitSite.about.description}
           />
+          <div className="mt-5 max-w-3xl space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
+            {recruitSite.about.description.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
         </InViewBlock>
         <div className="mt-10 space-y-4">
           {recruitSite.about.points.map((point, index) => (
@@ -393,16 +390,16 @@ export function JobsRequirementsSection() {
                         <p className="mt-4 text-sm leading-7 text-gray-600">
                           {job.description}
                         </p>
-                        <dl className="mt-6 space-y-3 text-sm text-gray-700">
-                          <div className="flex items-start justify-between gap-3 border-t border-gray-100 pt-3">
-                            <dt className="text-gray-400">勤務地</dt>
-                            <dd>{job.location}</dd>
+                        <div className="mt-6 space-y-4 text-sm leading-7 text-gray-600">
+                          <div>
+                            <p className="font-bold text-gray-900">勤務地</p>
+                            <p className="mt-1">{job.location}</p>
                           </div>
-                          <div className="flex items-start justify-between gap-3 border-t border-gray-100 pt-3">
-                            <dt className="text-gray-400">雇用形態</dt>
-                            <dd>{job.employment}</dd>
+                          <div>
+                            <p className="font-bold text-gray-900">雇用形態</p>
+                            <p className="mt-1">{job.employment}</p>
                           </div>
-                        </dl>
+                        </div>
                       </div>
                       <div className="flex shrink-0 flex-col items-center gap-2 pt-1">
                         <span
@@ -436,8 +433,7 @@ export function JobsRequirementsSection() {
                         className="overflow-hidden"
                       >
                         <div className="border-t border-gray-100 px-6 pb-8">
-                          <div className="flex flex-col gap-4 pt-6 md:flex-row md:items-center md:justify-between">
-                            <ChipList items={requirement.employment} />
+                          <div className="pt-6">
                             <LineCtaButton
                               label="この職種でLINE相談する"
                               location={`job-${job.slug}`}
@@ -445,6 +441,14 @@ export function JobsRequirementsSection() {
                             />
                           </div>
                           <RequirementDetails job={requirement} />
+                          <button
+                            type="button"
+                            onClick={() => toggleJob(job.slug)}
+                            className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-gray-50 px-6 py-4 text-sm font-semibold text-gray-900 transition hover:border-red-200 hover:bg-red-50"
+                          >
+                            <ChevronDown className="size-4 text-red-600" />
+                            閉じる
+                          </button>
                         </div>
                       </motion.div>
                     ) : null}
@@ -530,10 +534,9 @@ export function CommentsSection() {
         <InViewBlock variants={fadeInUp}>
           <SectionHeading
             label="Voices"
-            title="社員・スタッフコメント"
+            title="社員コメント"
             description={recruitSite.voices.description}
           />
-          <p className="mt-3 text-sm text-gray-500">タップして全文を読む</p>
         </InViewBlock>
         <div className="mt-10 overflow-hidden">
           <motion.div
@@ -656,7 +659,7 @@ export function FaqSection() {
 export function FinalCtaSection() {
   return (
     <AnimatedSection className="px-4 pt-20 pb-28 md:px-8 md:pt-32 md:pb-36">
-      <InViewBlock variants={fadeIn}>
+      <ScrollReveal variants={slideInRight}>
         <div className="mx-auto max-w-4xl rounded-[2rem] border border-red-200 bg-gradient-to-br from-red-700 via-red-600 to-red-800 p-6 text-center shadow-[0_24px_80px_rgba(127,29,29,0.2)] md:p-12">
           <SectionHeading
             title={recruitSite.finalCta.title}
@@ -684,7 +687,7 @@ export function FinalCtaSection() {
             </div>
           </div>
         </div>
-      </InViewBlock>
+      </ScrollReveal>
     </AnimatedSection>
   );
 }

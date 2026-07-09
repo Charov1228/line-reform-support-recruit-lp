@@ -4,21 +4,36 @@ import { motion } from "framer-motion";
 
 type MarqueeProps = {
   items: readonly string[];
+  className?: string;
 };
 
-export function Marquee({ items }: MarqueeProps) {
-  const content = [...items, ...items, ...items];
+export function Marquee({ items, className = "" }: MarqueeProps) {
+  const track = (
+    <div className="flex shrink-0 items-center">
+      {Array.from({ length: 8 }).map((_, index) =>
+        items.map((item) => (
+          <span
+            key={`${item}-${index}`}
+            className="mx-10 inline-flex shrink-0 items-center whitespace-nowrap text-sm font-semibold tracking-[0.35em] text-white/50 uppercase md:mx-14 md:text-base"
+          >
+            {item}
+          </span>
+        )),
+      )}
+    </div>
+  );
 
   return (
-    <div className="overflow-hidden border-y border-white/10 bg-black/30 py-3">
+    <div
+      className={`overflow-hidden border-y border-white/15 bg-black/40 py-3 backdrop-blur-sm ${className}`}
+    >
       <motion.div
-        className="flex w-max gap-8 whitespace-nowrap text-xs font-semibold tracking-[0.35em] text-white/35 uppercase md:text-sm"
-        animate={{ x: ["0%", "-33.333%"] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+        className="flex w-max"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
       >
-        {content.map((item, index) => (
-          <span key={`${item}-${index}`}>{item}</span>
-        ))}
+        {track}
+        {track}
       </motion.div>
     </div>
   );

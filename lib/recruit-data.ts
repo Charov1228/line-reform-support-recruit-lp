@@ -24,12 +24,15 @@ export const recruitSite = {
       "SNSでも注目を集める大人気動画クリエイターです。",
     ],
     image: "/images/founders.png",
+    youtubeUrl: "https://www.youtube.com/@kesantotaro",
   },
   about: {
     title: "私たちについて",
     heading: "信頼される現場を、若い力とチームで支える。",
-    description:
-      "株式会社LINE REFORM SUPPORTは、店舗やオフィスなどのスケルトン解体をはじめ、内装解体・警備・人材派遣・収集運搬など、幅広い事業を展開しています。協力会社様とも連携を取りながら、東京を中心に積み重ねてきた豊富な実績があります。",
+    description: [
+      "株式会社LINE REFORM SUPPORTは、内装解体・警備・人材派遣・収集運搬など、幅広い事業を展開しています。",
+      "協力会社様とも連携を取りながら、東京を中心に積み重ねてきた豊富な実績があります。",
+    ],
     points: [
       {
         title: "内装解体から廃棄物処理まで一貫対応",
@@ -78,7 +81,7 @@ export const recruitSite = {
   ],
   appeal: {
     description:
-      "店舗やオフィスなどのスケルトン解体から、廃棄物の収集運搬・中間処理まで。現場への配慮と確かな技術で、地域のリフォームを支え続けています。",
+      "警備・運搬・現場作業など、さまざまなフィールドで活躍できます。チームで支え合いながら、自分の力を実感できる仕事がここにあります。",
     backgroundImage: "/images/workers.jpg",
     items: [
       {

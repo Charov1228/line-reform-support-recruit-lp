@@ -22,14 +22,17 @@ export function FloatingCta() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 96, opacity: 0 }}
           transition={{ duration: 0.28 }}
-          className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-3 shadow-[0_-8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl md:hidden"
+          className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-3 shadow-[0_-8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl md:py-4"
         >
-          <LineCtaButton
-            label="LINEで無料相談する"
-            sublabel="応募前の質問だけでも大丈夫です"
-            location="floating-mobile"
-            fullWidth
-          />
+          <div className="mx-auto flex max-w-3xl justify-center">
+            <LineCtaButton
+              label="LINEで無料相談する"
+              sublabel="応募前の質問だけでも大丈夫です"
+              location="floating-bar"
+              fullWidth
+              className="md:w-auto md:min-w-[320px]"
+            />
+          </div>
         </motion.div>
       ) : null}
     </AnimatePresence>

@@ -3,7 +3,7 @@ import { recruitSite } from "@/lib/recruit-data";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-gray-200 bg-gray-50 px-4 pt-10 pb-36 md:px-8 md:pb-10">
+    <footer className="border-t border-gray-200 bg-gray-50 px-4 pt-10 pb-36 md:px-8 md:pb-28">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>

@@ -6,7 +6,11 @@ import { recruitSite } from "@/lib/recruit-data";
 import { LineCtaButton } from "@/components/recruit/line-cta-button";
 import { Marquee } from "@/components/recruit/marquee";
 
-export function HeroSection() {
+type HeroSectionProps = {
+  introComplete?: boolean;
+};
+
+export function HeroSection({ introComplete = true }: HeroSectionProps) {
   return (
     <section className="relative min-h-screen overflow-hidden bg-black text-white">
       <div className="absolute inset-0">
@@ -31,13 +35,13 @@ export function HeroSection() {
               priority
               className="object-cover"
             />
-            <div className="absolute right-4 bottom-6 rounded-full border border-white/15 bg-black/55 px-4 py-2 text-xs tracking-[0.3em] text-white/75 uppercase md:right-8 md:bottom-8">
+            <div className="absolute right-4 bottom-28 rounded-full border border-white/15 bg-black/55 px-4 py-2 text-xs tracking-[0.3em] text-white/75 uppercase md:right-8 md:bottom-32">
               {recruitSite.hero.placeholderLabel}
             </div>
           </>
         )}
       </div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.9)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]" />
       <motion.div
         aria-hidden
         className="absolute -top-16 -left-8 h-56 w-56 rounded-full bg-red-600/20 blur-3xl"
@@ -46,17 +50,17 @@ export function HeroSection() {
       />
       <motion.div
         aria-hidden
-        className="absolute right-0 bottom-20 h-72 w-72 rounded-full bg-red-400/10 blur-3xl"
+        className="absolute right-0 bottom-32 h-72 w-72 rounded-full bg-red-400/10 blur-3xl"
         animate={{ y: [0, -18, 0], x: [0, -14, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 pt-24 pb-10 md:px-8 md:pt-28">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 pt-24 pb-28 md:px-8 md:pt-28 md:pb-32">
         <motion.div
           className="max-w-5xl"
           initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          animate={introComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+          transition={{ duration: 0.9, delay: introComplete ? 0.15 : 0, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="text-sm font-semibold tracking-[0.4em] text-red-300 uppercase">
             {recruitSite.topLead.eyebrow}
@@ -94,7 +98,7 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      <div className="relative">
+      <div className="absolute inset-x-0 bottom-0 z-20">
         <Marquee items={recruitSite.hero.englishCopy} />
       </div>
     </section>
