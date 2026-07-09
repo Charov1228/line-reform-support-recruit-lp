@@ -259,18 +259,28 @@ export function FoundersSection() {
               <FoundersPhoto />
             </div>
           </InViewBlock>
-          <InViewBlock variants={fadeInUp} delay={0.15}>
-            <div className="relative z-20 flex flex-col justify-center">
-              <SectionHeading
-                label={recruitSite.founders.label}
-                title={recruitSite.founders.title}
-              />
-              <p className="mt-3 text-base font-bold text-gray-900 md:text-lg">
-                {recruitSite.founders.role}
-              </p>
+          <div className="relative z-20 flex flex-col justify-center">
+            <SectionHeading
+              label={recruitSite.founders.label}
+              title={recruitSite.founders.title}
+            />
+            <p className="mt-3 text-base font-bold text-gray-900 md:text-lg">
+              {recruitSite.founders.role}
+            </p>
+            <InViewBlock variants={fadeInUp} delay={0.15}>
               <div className="mt-12 space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
-                {recruitSite.founders.description.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+                {recruitSite.founders.description.map((paragraph, index) => (
+                  <p key={paragraph}>
+                    {index === 0 ? (
+                      <>
+                        弊社で働きながら、
+                        <br className="md:hidden" />
+                        動画クリエイターとしても活躍中！
+                      </>
+                    ) : (
+                      paragraph
+                    )}
+                  </p>
                 ))}
               </div>
               <a
@@ -288,8 +298,8 @@ export function FoundersSection() {
                 />
                 YouTube
               </a>
-            </div>
-          </InViewBlock>
+            </InViewBlock>
+          </div>
         </div>
       </div>
     </AnimatedSection>

@@ -122,7 +122,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
           </motion.p>
 
           <motion.h1
-            className="mt-5 text-[2.65rem] font-black leading-[1.05] tracking-tight text-white [text-shadow:0_8px_30px_rgba(0,0,0,0.38)] md:mt-8 md:text-[5.25rem]"
+            className="mt-5 text-[1.9rem] font-black leading-[1.1] tracking-tight text-white [text-shadow:0_8px_30px_rgba(0,0,0,0.38)] sm:text-[2.65rem] md:mt-8 md:text-[5.25rem]"
             initial="hidden"
             animate={show ? "visible" : "hidden"}
             variants={headlineContainer}
@@ -150,7 +150,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
           </motion.div>
 
           <motion.div
-            className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
+            className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:items-center"
             initial="hidden"
             animate={show ? "visible" : "hidden"}
             variants={heroActions}
