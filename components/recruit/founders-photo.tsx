@@ -5,6 +5,8 @@ const FOUNDERS_IMAGE = "/images/founders.png";
 
 // Original founders card ratio (854 x 856)
 const CARD_ASPECT = "854 / 856";
+// Space for raised hands above the card (matched top/bottom for visual balance)
+const HAND_OVERFLOW = "30%";
 
 export function FoundersPhoto() {
   return (
@@ -13,7 +15,13 @@ export function FoundersPhoto() {
       animate={{ y: [0, 8, 0] }}
       transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
     >
-      <div className="relative overflow-visible pt-[38%]">
+      <div
+        className="relative overflow-visible"
+        style={{
+          paddingTop: HAND_OVERFLOW,
+          paddingBottom: HAND_OVERFLOW,
+        }}
+      >
         <div
           className="relative w-full overflow-visible"
           style={{ aspectRatio: CARD_ASPECT }}
