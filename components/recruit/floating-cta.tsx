@@ -24,13 +24,12 @@ export function FloatingCta() {
           transition={{ duration: 0.28 }}
           className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-3 shadow-[0_-8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl md:py-4"
         >
-          <div className="mx-auto flex max-w-3xl justify-center">
+          <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center">
             <LineCtaButton
               label="LINEで無料相談する"
               sublabel="応募前の質問だけでも大丈夫です"
               location="floating-bar"
-              fullWidth
-              className="md:w-auto md:min-w-[320px]"
+              className="w-full max-w-md sm:w-auto sm:min-w-[320px]"
             />
           </div>
         </motion.div>

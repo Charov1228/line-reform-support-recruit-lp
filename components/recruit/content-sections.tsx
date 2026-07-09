@@ -249,25 +249,23 @@ export function FoundersSection() {
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
+              <a
+                href={recruitSite.founders.youtubeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-gray-200 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-900 transition hover:border-red-200 hover:bg-red-50"
+              >
+                <Image
+                  src="/images/youtube.png"
+                  alt="YouTube"
+                  width={40}
+                  height={28}
+                  className="h-7 w-auto"
+                />
+                YouTube
+              </a>
             </div>
           </InViewBlock>
-        </div>
-        <div className="mt-8 border-t border-gray-100 pt-6">
-          <a
-            href={recruitSite.founders.youtubeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 rounded-2xl border border-gray-200 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-900 transition hover:border-red-200 hover:bg-red-50"
-          >
-            <Image
-              src="/images/youtube.png"
-              alt="YouTube"
-              width={40}
-              height={28}
-              className="h-7 w-auto"
-            />
-            YouTube
-          </a>
         </div>
       </div>
     </AnimatedSection>
@@ -434,13 +432,15 @@ export function JobsRequirementsSection() {
                       >
                         <div className="border-t border-gray-100 px-6 pb-8">
                           <div className="pt-6">
+                            <RequirementDetails job={requirement} />
+                          </div>
+                          <div className="mt-8 flex justify-center">
                             <LineCtaButton
                               label="この職種でLINE相談する"
                               location={`job-${job.slug}`}
                               className="px-5 py-3 text-sm"
                             />
                           </div>
-                          <RequirementDetails job={requirement} />
                           <button
                             type="button"
                             onClick={() => toggleJob(job.slug)}

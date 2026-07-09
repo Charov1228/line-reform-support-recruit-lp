@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { recruitSite } from "@/lib/recruit-data";
@@ -27,39 +28,38 @@ export function OpeningIntro({ onComplete }: OpeningIntroProps) {
     >
       <motion.div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(217,43,52,0.35),transparent_62%)]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(217,43,52,0.28),transparent_58%)]"
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       />
-      <motion.div
-        aria-hidden
-        className="absolute top-1/2 h-px w-0 bg-red-500"
-        initial={{ width: 0, x: "-50%" }}
-        animate={{ width: "min(72vw, 520px)", x: "-50%" }}
-        transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-        style={{ left: "50%" }}
-      />
-      <div className="relative px-6 text-center">
-        <motion.p
-          className="text-xs font-semibold tracking-[0.55em] text-red-400 uppercase md:text-sm"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      <div className="relative flex flex-col items-center px-6 text-center">
+        <motion.div
+          className="rounded-[2rem] bg-white px-8 py-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] md:px-10 md:py-8"
+          initial={{ opacity: 0, scale: 0.88, y: 24 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.85, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          {recruitSite.company}
-        </motion.p>
-        <motion.h1
-          className="mt-5 font-heading text-4xl font-bold tracking-[0.18em] text-white uppercase md:text-6xl"
-          initial={{ opacity: 0, y: 36, scale: 0.92 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.85, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          <Image
+            src="/images/logo-reform-support.png"
+            alt={recruitSite.company}
+            width={220}
+            height={96}
+            priority
+            className="h-16 w-auto md:h-20"
+          />
+        </motion.div>
+        <motion.p
+          className="mt-6 text-xs font-semibold tracking-[0.45em] text-red-300 uppercase md:text-sm"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
         >
           Recruit
-        </motion.h1>
+        </motion.p>
         <motion.p
-          className="mt-6 text-sm leading-8 text-white/65 md:text-base"
-          initial={{ opacity: 0, y: 20 }}
+          className="mt-4 text-sm leading-8 text-white/65 md:text-base"
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
         >

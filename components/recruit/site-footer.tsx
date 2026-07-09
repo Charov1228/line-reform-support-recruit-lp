@@ -15,9 +15,18 @@ export function SiteFooter() {
               className="h-12 w-auto"
             />
             <p className="mt-4 max-w-xl text-sm leading-7 text-gray-500">
-              本ページは {recruitSite.company}
-              の採用サイトです。LINEから気軽に応募・問い合わせできます。
+              本ページは {recruitSite.company}の採用サイトです。
+              <br />
+              LINEから気軽に応募・問い合わせできます。
             </p>
+            <a
+              href={recruitSite.companyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-red-600 transition hover:text-red-700"
+            >
+              会社HPはこちら
+            </a>
           </div>
           <div className="text-sm text-gray-400">
             © {new Date().getFullYear()} {recruitSite.company}. All rights reserved.
