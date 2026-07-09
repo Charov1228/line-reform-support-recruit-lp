@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronRight, MessageCircleMore, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Home, MessageCircleMore, Sparkles, X } from "lucide-react";
 import {
   AnimatedSection,
   InViewBlock,
@@ -242,9 +242,11 @@ export function FoundersSection() {
               <SectionHeading
                 label={recruitSite.founders.label}
                 title={recruitSite.founders.title}
-                description={recruitSite.founders.role}
               />
-              <div className="mt-6 space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
+              <p className="mt-3 text-base font-bold text-gray-900 md:text-lg">
+                {recruitSite.founders.role}
+              </p>
+              <div className="mt-12 space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
                 {recruitSite.founders.description.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
@@ -498,25 +500,85 @@ export function AppealSection() {
 }
 
 export function BeginnerSection() {
+  const reasonIcons = [Sparkles, Home, MessageCircleMore] as const;
+  const reasonColors = [
+    "from-red-500 to-red-600",
+    "from-rose-500 to-red-500",
+    "from-orange-500 to-red-500",
+  ] as const;
+
   return (
-    <AnimatedSection className="px-4 py-20 md:px-8 md:py-32">
-      <div className="mx-auto max-w-6xl rounded-[2rem] border border-gray-200 bg-gray-50 p-6 md:p-10">
+    <AnimatedSection className="relative overflow-hidden px-4 py-20 md:px-8 md:py-32">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-20 right-0 h-72 w-72 rounded-full bg-red-100/80 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-red-50 blur-3xl"
+      />
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-sm md:p-10">
+        <div className="pointer-events-none absolute -right-8 -top-8 hidden opacity-20 md:block">
+          <svg width="220" height="220" viewBox="0 0 220 220" fill="none" aria-hidden>
+            <circle cx="110" cy="110" r="90" stroke="#D92B34" strokeWidth="2" strokeDasharray="8 10" />
+            <circle cx="110" cy="110" r="58" fill="#FEE2E2" />
+            <path
+              d="M78 126c10-24 54-24 64 0"
+              stroke="#D92B34"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+            <circle cx="88" cy="98" r="7" fill="#D92B34" />
+            <circle cx="132" cy="98" r="7" fill="#D92B34" />
+          </svg>
+        </div>
+
         <InViewBlock variants={fadeInUp}>
-          <SectionHeading
-            label="For Beginner"
-            title="未経験でも安心な理由"
-            description={recruitSite.beginner.description}
-          />
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <SectionHeading
+              label="For Beginner"
+              title="未経験でも安心な理由"
+              description={recruitSite.beginner.description}
+            />
+            <div className="flex shrink-0 gap-3">
+              {reasonIcons.map((Icon, index) => (
+                <div
+                  key={index}
+                  className={`flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${reasonColors[index]} text-white shadow-lg`}
+                >
+                  <Icon className="size-7" />
+                </div>
+              ))}
+            </div>
+          </div>
         </InViewBlock>
+
         <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {recruitSite.beginner.reasons.map((reason) => (
-            <ScrollReveal key={reason.title} variants={fadeInUp}>
-              <div className="h-full rounded-[1.5rem] border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                <h3 className="text-lg font-bold text-gray-900">{reason.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-gray-600">{reason.description}</p>
-              </div>
-            </ScrollReveal>
-          ))}
+          {recruitSite.beginner.reasons.map((reason, index) => {
+            const Icon = reasonIcons[index] ?? Sparkles;
+            const color = reasonColors[index] ?? reasonColors[0];
+
+            return (
+              <ScrollReveal key={reason.title} variants={fadeInUp}>
+                <div className="group relative h-full overflow-hidden rounded-[1.5rem] border border-white bg-white/90 p-6 shadow-[0_16px_40px_rgba(217,43,52,0.08)] transition hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(217,43,52,0.12)]">
+                  <div
+                    className={`inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${color} text-white shadow-md`}
+                  >
+                    <Icon className="size-7" />
+                  </div>
+                  <p className="mt-5 text-xs font-semibold tracking-[0.28em] text-red-500 uppercase">
+                    Point {index + 1}
+                  </p>
+                  <h3 className="mt-2 text-lg font-bold text-gray-900">{reason.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-gray-600">{reason.description}</p>
+                  <div
+                    aria-hidden
+                    className="absolute -bottom-6 -right-6 size-24 rounded-full bg-red-50 transition group-hover:bg-red-100"
+                  />
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </AnimatedSection>
