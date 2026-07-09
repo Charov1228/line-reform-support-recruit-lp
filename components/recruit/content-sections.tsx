@@ -281,10 +281,9 @@ export function AboutSection() {
             label="About Us"
             title={recruitSite.about.heading}
           />
-          <div className="mt-5 max-w-3xl space-y-4 text-sm leading-7 text-gray-600 md:text-base md:leading-8">
-            {recruitSite.about.description.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+          <div className="mt-5 max-w-3xl text-sm leading-7 text-gray-600 md:text-base md:leading-8">
+            <p>{recruitSite.about.description[0]}</p>
+            <p className="mt-4">{recruitSite.about.description[1]}</p>
           </div>
         </InViewBlock>
         <div className="mt-10 space-y-4">
@@ -663,7 +662,7 @@ export function FinalCtaSection() {
         <div className="mx-auto max-w-4xl rounded-[2rem] border border-red-200 bg-gradient-to-br from-red-700 via-red-600 to-red-800 p-6 text-center shadow-[0_24px_80px_rgba(127,29,29,0.2)] md:p-12">
           <SectionHeading
             title={recruitSite.finalCta.title}
-            description={`${recruitSite.finalCta.subtitle} ${recruitSite.finalCta.body}`}
+            description={recruitSite.finalCta.description}
             align="center"
             light
           />

@@ -10,7 +10,62 @@ type HeroSectionProps = {
   introComplete?: boolean;
 };
 
+const heroEase = [0.22, 1, 0.36, 1] as const;
+
+const headlineContainer = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.2, delayChildren: 0.25 },
+  },
+};
+
+const headlineLine = {
+  hidden: {
+    opacity: 0,
+    y: 72,
+    scale: 0.96,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { duration: 1.05, ease: heroEase },
+  },
+};
+
+const heroMeta = {
+  hidden: { opacity: 0, x: -36 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.75, ease: heroEase },
+  },
+};
+
+const heroSupport = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: heroEase },
+  },
+};
+
+const heroActions = {
+  hidden: { opacity: 0, y: 24, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.7, ease: heroEase },
+  },
+};
+
 export function HeroSection({ introComplete = true }: HeroSectionProps) {
+  const show = introComplete;
+
   return (
     <section className="relative min-h-screen overflow-hidden bg-black text-white">
       <div className="absolute inset-0">
@@ -56,33 +111,51 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
       />
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 pt-24 pb-28 md:px-8 md:pt-28 md:pb-32">
-        <motion.div
-          className="max-w-5xl"
-          initial={{ opacity: 0, y: 32 }}
-          animate={introComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-          transition={{ duration: 0.9, delay: introComplete ? 0.15 : 0, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className="text-sm font-semibold tracking-[0.4em] text-red-300 uppercase">
+        <div className="max-w-5xl">
+          <motion.p
+            className="text-sm font-semibold tracking-[0.4em] text-red-300 uppercase"
+            initial="hidden"
+            animate={show ? "visible" : "hidden"}
+            variants={heroMeta}
+          >
             {recruitSite.topLead.eyebrow}
-          </p>
-          <h1 className="mt-5 text-[2.65rem] font-black leading-[1.05] tracking-tight text-white [text-shadow:0_8px_30px_rgba(0,0,0,0.38)] md:mt-8 md:text-[5.25rem]">
-            {recruitSite.hero.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </h1>
+          </motion.p>
 
-          <div className="mt-8 max-w-2xl">
+          <motion.h1
+            className="mt-5 text-[2.65rem] font-black leading-[1.05] tracking-tight text-white [text-shadow:0_8px_30px_rgba(0,0,0,0.38)] md:mt-8 md:text-[5.25rem]"
+            initial="hidden"
+            animate={show ? "visible" : "hidden"}
+            variants={headlineContainer}
+          >
+            {recruitSite.hero.headline.map((line) => (
+              <motion.span key={line} className="block" variants={headlineLine}>
+                {line}
+              </motion.span>
+            ))}
+          </motion.h1>
+
+          <motion.div
+            className="mt-8 max-w-2xl"
+            initial="hidden"
+            animate={show ? "visible" : "hidden"}
+            variants={heroSupport}
+            transition={{ delay: 0.72 }}
+          >
             <p className="text-base font-medium text-red-100 md:text-lg">
               {recruitSite.topLead.title}
             </p>
             <p className="mt-3 text-sm leading-7 text-white/72 md:text-base md:leading-8">
               {recruitSite.topLead.description}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <motion.div
+            className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
+            initial="hidden"
+            animate={show ? "visible" : "hidden"}
+            variants={heroActions}
+            transition={{ delay: 0.95 }}
+          >
             <LineCtaButton
               label="LINEで無料相談する"
               sublabel="応募前の質問だけでも大丈夫です"
@@ -94,8 +167,8 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
             >
               募集要項を見る
             </a>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-20">

@@ -1,7 +1,9 @@
+import { Fragment } from "react";
+
 type SectionHeadingProps = {
   label?: string;
   title: string;
-  description?: string;
+  description?: string | readonly string[];
   align?: "left" | "center";
   light?: boolean;
 };
@@ -13,6 +15,10 @@ export function SectionHeading({
   align = "left",
   light = false,
 }: SectionHeadingProps) {
+  const descriptionClass = `mt-5 max-w-3xl text-sm leading-7 md:text-base md:leading-8 ${
+    align === "center" ? "mx-auto" : ""
+  } ${light ? "text-white/80" : "text-gray-600"}`;
+
   return (
     <div className={align === "center" ? "text-center" : ""}>
       {label ? (
@@ -32,12 +38,17 @@ export function SectionHeading({
         {title}
       </h2>
       {description ? (
-        <p
-          className={`mt-5 max-w-3xl text-sm leading-7 md:text-base md:leading-8 ${
-            align === "center" ? "mx-auto" : ""
-          } ${light ? "text-white/80" : "text-gray-600"}`}
-        >
-          {description}
+        <p className={descriptionClass}>
+          {Array.isArray(description) ? (
+            description.map((line, index) => (
+              <Fragment key={line}>
+                {index > 0 ? <br /> : null}
+                {line}
+              </Fragment>
+            ))
+          ) : (
+            description
+          )}
         </p>
       ) : null}
     </div>
