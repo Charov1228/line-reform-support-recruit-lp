@@ -23,10 +23,42 @@ export function RecruitHomePage() {
   const [introComplete, setIntroComplete] = useState(false);
 
   useEffect(() => {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    const navigation = performance.getEntriesByType("navigation")[0] as
+      | PerformanceNavigationTiming
+      | undefined;
+
+    if (navigation?.type === "reload" && window.location.hash) {
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}`,
+      );
+    }
+
+    window.scrollTo(0, 0);
+
+    return () => {
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "auto";
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     document.body.style.overflow = introComplete ? "" : "hidden";
     return () => {
       document.body.style.overflow = "";
     };
+  }, [introComplete]);
+
+  useEffect(() => {
+    if (introComplete) {
+      window.scrollTo(0, 0);
+    }
   }, [introComplete]);
 
   const handleIntroComplete = () => {
