@@ -1,8 +1,8 @@
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 
 type SectionHeadingProps = {
   label?: string;
-  title: string;
+  title: ReactNode;
   description?: string | readonly string[];
   align?: "left" | "center";
   light?: boolean;

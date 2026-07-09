@@ -809,7 +809,13 @@ export function FinalCtaSection() {
       <ScrollReveal variants={slideInRight}>
         <div className="mx-auto max-w-4xl rounded-[2rem] border border-red-200 bg-gradient-to-br from-red-700 via-red-600 to-red-800 p-6 text-center shadow-[0_24px_80px_rgba(127,29,29,0.2)] md:p-12">
           <SectionHeading
-            title={recruitSite.finalCta.title}
+            title={
+              <>
+                この会社なら
+                <br className="md:hidden" />
+                安心して働けそう。
+              </>
+            }
             description={recruitSite.finalCta.description}
             align="center"
             light
