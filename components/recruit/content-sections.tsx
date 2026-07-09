@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronRight, Building2, GraduationCap, Heart, Home, MessageCircleMore, Shield, Sparkles, Users, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Building2, GraduationCap, Home, MessageCircleMore, Shield, Sparkles, Users, X } from "lucide-react";
 import {
   AnimatedSection,
   InViewBlock,
@@ -538,13 +538,6 @@ export function JobsRequirementsSection() {
 }
 
 export function AppealSection() {
-  const appealIcons = [Building2, Users, Heart] as const;
-  const appealColors = [
-    "from-red-500 to-red-600",
-    "from-rose-500 to-red-500",
-    "from-orange-500 to-red-500",
-  ] as const;
-
   return (
     <AnimatedSection className="relative overflow-hidden px-4 py-20 md:px-8 md:py-32">
       <div className="absolute inset-0">
@@ -556,8 +549,7 @@ export function AppealSection() {
         />
         <div className="absolute inset-0 bg-white/88" />
       </div>
-      <SectionGlow />
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50/80 via-white/90 to-white/90 p-6 shadow-sm backdrop-blur-sm md:p-10">
+      <div className="relative mx-auto max-w-6xl">
         <InViewBlock variants={fadeInUp}>
           <SectionHeading
             label="Why Join"
@@ -566,24 +558,14 @@ export function AppealSection() {
           />
         </InViewBlock>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {recruitSite.appeal.items.map((item, index) => {
-            const Icon = appealIcons[index] ?? Heart;
-            const color = appealColors[index] ?? appealColors[0];
-
-            return (
-              <ScrollReveal key={item.title} variants={slideInRight}>
-                <div className="relative h-full overflow-hidden rounded-[1.75rem] border border-white bg-white/90 p-6 shadow-[0_16px_40px_rgba(217,43,52,0.08)]">
-                  <div
-                    className={`inline-flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br ${color} text-white shadow-md`}
-                  >
-                    <Icon className="size-6" />
-                  </div>
-                  <h3 className="mt-5 text-xl font-bold text-gray-900">{item.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-gray-600">{item.description}</p>
-                </div>
-              </ScrollReveal>
-            );
-          })}
+          {recruitSite.appeal.items.map((item) => (
+            <ScrollReveal key={item.title} variants={slideInRight}>
+              <div className="rounded-[1.75rem] border border-gray-200 bg-white/90 p-6 shadow-sm backdrop-blur-sm">
+                <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-gray-600">{item.description}</p>
+              </div>
+            </ScrollReveal>
+          ))}
         </div>
       </div>
     </AnimatedSection>
@@ -730,9 +712,18 @@ export function CommentsSection() {
 }
 
 export function FlowSection() {
+  const flowIcons = [MessageCircleMore, Users, Shield, Sparkles] as const;
+  const flowColors = [
+    "from-red-500 to-red-600",
+    "from-rose-500 to-red-500",
+    "from-orange-500 to-red-500",
+    "from-red-600 to-rose-600",
+  ] as const;
+
   return (
-    <AnimatedSection className="bg-gray-50 px-4 py-20 md:px-8 md:py-32">
-      <div className="mx-auto max-w-6xl">
+    <AnimatedSection className="relative overflow-hidden bg-gray-50 px-4 py-20 md:px-8 md:py-32">
+      <SectionGlow />
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-red-100 bg-gradient-to-br from-red-50 via-white to-white p-6 shadow-sm md:p-10">
         <InViewBlock variants={fadeInUp}>
           <SectionHeading
             label="Entry Flow"
@@ -741,15 +732,36 @@ export function FlowSection() {
           />
         </InViewBlock>
         <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {recruitSite.flow.map((step) => (
-            <ScrollReveal key={step.step} variants={fadeInUp}>
-              <div className="h-full rounded-[1.75rem] border border-gray-200 bg-white p-6 shadow-sm">
-                <p className="text-4xl font-black text-red-200">{step.step}</p>
-                <h3 className="mt-4 text-xl font-bold text-gray-900">{step.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-gray-600">{step.description}</p>
-              </div>
-            </ScrollReveal>
-          ))}
+          {recruitSite.flow.map((step, index) => {
+            const Icon = flowIcons[index] ?? Sparkles;
+            const color = flowColors[index] ?? flowColors[0];
+
+            return (
+              <ScrollReveal key={step.step} variants={fadeInUp}>
+                <div className="group relative h-full overflow-hidden rounded-[1.5rem] border border-white bg-white/90 p-6 shadow-[0_16px_40px_rgba(217,43,52,0.08)] transition hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(217,43,52,0.12)]">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute -bottom-6 -right-6 z-0 size-24 rounded-full bg-red-50 transition group-hover:bg-red-100"
+                  />
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between gap-3">
+                      <div
+                        className={`inline-flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br ${color} text-white shadow-md`}
+                      >
+                        <Icon className="size-6" />
+                      </div>
+                      <p className="text-3xl font-black text-red-200">{step.step}</p>
+                    </div>
+                    <p className="mt-5 text-xs font-semibold tracking-[0.28em] text-red-500 uppercase">
+                      Step {step.step}
+                    </p>
+                    <h3 className="mt-2 text-xl font-bold text-gray-900">{step.title}</h3>
+                    <p className="mt-4 text-sm leading-7 text-gray-600">{step.description}</p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </AnimatedSection>
