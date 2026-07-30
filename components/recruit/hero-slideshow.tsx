@@ -38,7 +38,7 @@ export function HeroSlideshow({ images }: HeroSlideshowProps) {
             key={src}
             aria-hidden={!isActive}
             className={`absolute inset-0 transition-opacity ease-in-out ${
-              isActive ? "z-10 opacity-100" : "z-0 opacity-0"
+              isActive ? "z-[1] opacity-100" : "z-0 opacity-0"
             }`}
             style={{ transitionDuration: `${FADE_DURATION_MS}ms` }}
           >

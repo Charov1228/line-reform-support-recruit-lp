@@ -14,7 +14,7 @@ const heroEase = [0.22, 1, 0.36, 1] as const;
 const heroFrameClass =
   "mx-auto w-full max-w-[min(100%,calc(100dvh*16/9))]";
 const heroOverlayClass =
-  "pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]";
+  "pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]";
 
 const headlineContainer = {
   hidden: {},
@@ -91,7 +91,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
           </>
         ) : (
           <div className="flex h-full justify-center bg-white">
-            <div className={`relative h-full ${heroFrameClass}`}>
+            <div className={`relative h-full overflow-hidden bg-black ${heroFrameClass}`}>
               {introComplete ? (
                 <HeroSlideshow images={recruitSite.hero.slideshowImages} />
               ) : null}
