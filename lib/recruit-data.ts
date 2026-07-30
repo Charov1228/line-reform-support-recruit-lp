@@ -2,7 +2,7 @@ export const recruitSite = {
   company: "LINE REFORM SUPPORT",
   companyUrl: "https://line-rs.co.jp/",
   lineUrl: "https://lin.ee/slFQERD",
-  gaId: "G-QP7PPB6144",
+  gaId: "G-8GZH625NV2",
   hero: {
     videoSrc: "",
     poster: "/images/team.jpg",
