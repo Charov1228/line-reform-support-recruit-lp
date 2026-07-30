@@ -8,8 +8,8 @@ type HeroSlideshowProps = {
   images: readonly string[];
 };
 
-const SLIDE_DURATION_MS = 6000;
-const FADE_DURATION_S = 2;
+const SLIDE_DURATION_MS = 3000;
+const FADE_DURATION_S = 1;
 
 export function HeroSlideshow({ images }: HeroSlideshowProps) {
   const prefersReducedMotion = useReducedMotion();
