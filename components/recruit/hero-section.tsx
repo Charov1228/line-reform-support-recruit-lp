@@ -12,7 +12,7 @@ type HeroSectionProps = {
 
 const heroEase = [0.22, 1, 0.36, 1] as const;
 const heroFrameClass =
-  "mx-auto w-full max-w-[min(100%,calc(100dvh*16/9))]";
+  "mx-auto h-full w-full md:max-w-[min(100%,calc(100dvh*16/9))]";
 const heroOverlayClass =
   "absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]";
 
@@ -88,8 +88,8 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
             <source src={recruitSite.hero.videoSrc} type="video/mp4" />
           </video>
         ) : (
-          <div className="flex h-full justify-center bg-white">
-            <div className={`relative h-full overflow-hidden bg-black ${heroFrameClass}`}>
+          <div className="flex h-full justify-center bg-black md:bg-white">
+            <div className={`relative overflow-hidden bg-black ${heroFrameClass}`}>
               {introComplete ? (
                 <HeroSlideshow images={recruitSite.hero.slideshowImages} />
               ) : null}
@@ -104,7 +104,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
           <div className={heroOverlayClass} />
         ) : introComplete ? (
           <div className="flex h-full justify-center">
-            <div className={`relative h-full ${heroFrameClass}`}>
+            <div className={`relative ${heroFrameClass}`}>
               <div className={heroOverlayClass} />
             </div>
           </div>
@@ -128,7 +128,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
       {/* Layer 3: copy / CTAs above everything in the hero */}
       <div
         className={`relative z-20 flex min-h-screen flex-col justify-center px-4 pt-24 pb-28 md:px-8 md:pt-28 md:pb-32 ${
-          usesSlideshow ? heroFrameClass : "mx-auto max-w-7xl"
+          usesSlideshow ? "mx-auto w-full md:max-w-[min(100%,calc(100dvh*16/9))]" : "mx-auto max-w-7xl"
         }`}
       >
         <div className="max-w-5xl">
