@@ -67,7 +67,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
   const show = introComplete;
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-black text-white">
+    <section className="relative min-h-screen overflow-hidden bg-white text-white">
       <div className="absolute inset-0">
         {recruitSite.hero.videoSrc ? (
           <video
@@ -84,7 +84,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
         ) : introComplete ? (
           <HeroSlideshow images={recruitSite.hero.slideshowImages} />
         ) : (
-          <div className="absolute inset-0 bg-black" aria-hidden />
+          <div className="absolute inset-0 bg-white" aria-hidden />
         )}
       </div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]" />

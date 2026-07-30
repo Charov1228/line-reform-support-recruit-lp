@@ -8,8 +8,8 @@ type HeroSlideshowProps = {
   images: readonly string[];
 };
 
-const SLIDE_DURATION_MS = 3000;
-const FADE_DURATION_MS = 1000;
+const SLIDE_DURATION_MS = 4000;
+const FADE_DURATION_MS = 2000;
 
 export function HeroSlideshow({ images }: HeroSlideshowProps) {
   const prefersReducedMotion = useReducedMotion();
@@ -29,7 +29,7 @@ export function HeroSlideshow({ images }: HeroSlideshowProps) {
   }, [images.length, motionEnabled]);
 
   return (
-    <div className="absolute inset-0 bg-black">
+    <div className="absolute inset-0 bg-white">
       {images.map((src, index) => {
         const isActive = prefersReducedMotion ? index === 0 : index === activeIndex;
 
