@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { recruitSite } from "@/lib/recruit-data";
 import { LineCtaButton } from "@/components/recruit/line-cta-button";
+import { HeroSlideshow } from "@/components/recruit/hero-slideshow";
 import { Marquee } from "@/components/recruit/marquee";
 
 type HeroSectionProps = {
@@ -82,18 +82,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
             <source src={recruitSite.hero.videoSrc} type="video/mp4" />
           </video>
         ) : (
-          <>
-            <Image
-              src={recruitSite.hero.poster}
-              alt="LINE REFORM SUPPORT 採用イメージ"
-              fill
-              priority
-              className="object-cover"
-            />
-            <div className="absolute right-4 bottom-28 rounded-full border border-white/15 bg-black/55 px-4 py-2 text-xs tracking-[0.3em] text-white/75 uppercase md:right-8 md:bottom-32">
-              {recruitSite.hero.placeholderLabel}
-            </div>
-          </>
+          <HeroSlideshow images={recruitSite.hero.slideshowImages} />
         )}
       </div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]" />
