@@ -72,7 +72,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
   const usesSlideshow = !recruitSite.hero.videoSrc;
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-white text-white">
+    <section className="relative min-h-screen overflow-hidden bg-black text-white md:bg-white">
       {/* Layer 1: background media only */}
       <div className="absolute inset-0 z-0">
         {recruitSite.hero.videoSrc ? (
@@ -89,7 +89,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
           </video>
         ) : (
           <div className="flex h-full justify-center bg-black md:bg-white">
-            <div className={`relative overflow-hidden bg-black ${heroFrameClass}`}>
+            <div className={`relative h-full overflow-hidden bg-black ${heroFrameClass}`}>
               {introComplete ? (
                 <HeroSlideshow images={recruitSite.hero.slideshowImages} />
               ) : null}
@@ -104,7 +104,7 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
           <div className={heroOverlayClass} />
         ) : introComplete ? (
           <div className="flex h-full justify-center">
-            <div className={`relative ${heroFrameClass}`}>
+            <div className={`relative h-full ${heroFrameClass}`}>
               <div className={heroOverlayClass} />
             </div>
           </div>

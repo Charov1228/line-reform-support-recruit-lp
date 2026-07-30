@@ -20,21 +20,18 @@ function MobileScrollTrack({
   trackId: string;
 }) {
   return (
-    <div className="flex h-full shrink-0 items-center">
+    <div className="flex h-full shrink-0 items-stretch">
       {images.map((src, index) => (
-        <div
+        <Image
           key={`${trackId}-${src}`}
-          className="relative h-full w-screen shrink-0"
-        >
-          <Image
-            src={src}
-            alt={`LINE REFORM SUPPORT 採用イメージ ${index + 1}`}
-            fill
-            priority={index < 2}
-            sizes="100vw"
-            className="object-contain object-center"
-          />
-        </div>
+          src={src}
+          alt={`LINE REFORM SUPPORT 採用イメージ ${index + 1}`}
+          width={1024}
+          height={576}
+          priority={index < 2}
+          sizes="180vh"
+          className="h-full w-auto max-w-none shrink-0"
+        />
       ))}
     </div>
   );
@@ -45,22 +42,21 @@ function MobileHeroSlideshow({ images }: HeroSlideshowProps) {
 
   if (prefersReducedMotion) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-black">
+      <div className="absolute inset-0">
         <Image
           src={images[0]}
           alt="LINE REFORM SUPPORT 採用イメージ"
-          width={1024}
-          height={576}
+          fill
           priority
           sizes="100vw"
-          className="h-auto w-full object-contain"
+          className="object-cover object-center"
         />
       </div>
     );
   }
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-black">
+    <div className="absolute inset-0 overflow-hidden">
       <motion.div
         className="flex h-full w-max will-change-transform"
         animate={{ x: ["0%", "-50%"] }}
