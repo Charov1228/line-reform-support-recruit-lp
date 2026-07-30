@@ -30,29 +30,35 @@ export function HeroSlideshow({ images }: HeroSlideshowProps) {
 
   return (
     <div className="absolute inset-0 bg-white">
-      {images.map((src, index) => {
-        const isActive = prefersReducedMotion ? index === 0 : index === activeIndex;
+      <div className="relative mx-auto h-full w-full max-w-[min(100%,calc(100dvh*16/9))]">
+        {images.map((src, index) => {
+          const isActive = prefersReducedMotion ? index === 0 : index === activeIndex;
 
-        return (
-          <div
-            key={src}
-            aria-hidden={!isActive}
-            className={`absolute inset-0 transition-opacity ease-in-out ${
-              isActive ? "z-10 opacity-100" : "z-0 opacity-0"
-            }`}
-            style={{ transitionDuration: `${FADE_DURATION_MS}ms` }}
-          >
-            <Image
-              src={src}
-              alt={`LINE REFORM SUPPORT 採用イメージ ${index + 1}`}
-              fill
-              priority={index < 2}
-              sizes="100vw"
-              className="object-contain object-center"
-            />
-          </div>
-        );
-      })}
+          return (
+            <div
+              key={src}
+              aria-hidden={!isActive}
+              className={`absolute inset-0 transition-opacity ease-in-out ${
+                isActive ? "z-10 opacity-100" : "z-0 opacity-0"
+              }`}
+              style={{ transitionDuration: `${FADE_DURATION_MS}ms` }}
+            >
+              <Image
+                src={src}
+                alt={`LINE REFORM SUPPORT 採用イメージ ${index + 1}`}
+                fill
+                priority={index < 2}
+                sizes="(max-width: 177.78dvh) 100vw, 177.78dvh"
+                className="object-cover object-center"
+              />
+            </div>
+          );
+        })}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]"
+        />
+      </div>
     </div>
   );
 }

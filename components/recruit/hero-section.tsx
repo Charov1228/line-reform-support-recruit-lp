@@ -87,7 +87,9 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
           <div className="absolute inset-0 bg-white" aria-hidden />
         )}
       </div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]" />
+      {recruitSite.hero.videoSrc ? (
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]" />
+      ) : null}
       <motion.div
         aria-hidden
         className="absolute -top-16 -left-8 h-56 w-56 rounded-full bg-red-600/20 blur-3xl"
