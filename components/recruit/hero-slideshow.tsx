@@ -6,17 +6,21 @@ import { motion, useReducedMotion } from "framer-motion";
 
 type HeroSlideshowProps = {
   images: readonly string[];
+  playing?: boolean;
 };
 
 const SLIDE_DURATION_MS = 3000;
 const FADE_DURATION_S = 1;
 
-export function HeroSlideshow({ images }: HeroSlideshowProps) {
+export function HeroSlideshow({
+  images,
+  playing = true,
+}: HeroSlideshowProps) {
   const prefersReducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (prefersReducedMotion || images.length <= 1) {
+    if (!playing || prefersReducedMotion || images.length <= 1) {
       return;
     }
 
@@ -25,7 +29,7 @@ export function HeroSlideshow({ images }: HeroSlideshowProps) {
     }, SLIDE_DURATION_MS);
 
     return () => window.clearInterval(timer);
-  }, [images.length, prefersReducedMotion]);
+  }, [images.length, playing, prefersReducedMotion]);
 
   return (
     <div className="absolute inset-0 bg-black">
