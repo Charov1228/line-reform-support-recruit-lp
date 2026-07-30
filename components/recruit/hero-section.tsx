@@ -11,6 +11,10 @@ type HeroSectionProps = {
 };
 
 const heroEase = [0.22, 1, 0.36, 1] as const;
+const heroFrameClass =
+  "mx-auto w-full max-w-[min(100%,calc(100dvh*16/9))]";
+const heroOverlayClass =
+  "pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]";
 
 const headlineContainer = {
   hidden: {},
@@ -65,31 +69,37 @@ const heroActions = {
 
 export function HeroSection({ introComplete = true }: HeroSectionProps) {
   const show = introComplete;
+  const usesSlideshow = !recruitSite.hero.videoSrc;
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-white text-white">
       <div className="absolute inset-0">
         {recruitSite.hero.videoSrc ? (
-          <video
-            className="h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={recruitSite.hero.poster}
-          >
-            <source src={recruitSite.hero.videoSrc} type="video/mp4" />
-          </video>
-        ) : introComplete ? (
-          <HeroSlideshow images={recruitSite.hero.slideshowImages} />
+          <>
+            <video
+              className="h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster={recruitSite.hero.poster}
+            >
+              <source src={recruitSite.hero.videoSrc} type="video/mp4" />
+            </video>
+            <div aria-hidden className={heroOverlayClass} />
+          </>
         ) : (
-          <div className="absolute inset-0 bg-white" aria-hidden />
+          <div className="flex h-full justify-center bg-white">
+            <div className={`relative h-full ${heroFrameClass}`}>
+              {introComplete ? (
+                <HeroSlideshow images={recruitSite.hero.slideshowImages} />
+              ) : null}
+              {introComplete ? <div aria-hidden className={heroOverlayClass} /> : null}
+            </div>
+          </div>
         )}
       </div>
-      {recruitSite.hero.videoSrc ? (
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]" />
-      ) : null}
       <motion.div
         aria-hidden
         className="absolute -top-16 -left-8 h-56 w-56 rounded-full bg-red-600/20 blur-3xl"
@@ -103,7 +113,11 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 pt-24 pb-28 md:px-8 md:pt-28 md:pb-32">
+      <div
+        className={`relative z-10 flex min-h-screen flex-col justify-center px-4 pt-24 pb-28 md:px-8 md:pt-28 md:pb-32 ${
+          usesSlideshow ? heroFrameClass : "mx-auto max-w-7xl"
+        }`}
+      >
         <div className="max-w-5xl">
           <motion.p
             className="text-sm font-semibold tracking-[0.4em] text-red-300 uppercase"
