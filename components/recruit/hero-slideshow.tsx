@@ -2,25 +2,22 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 
 type HeroSlideshowProps = {
   images: readonly string[];
-  playing?: boolean;
 };
 
 const SLIDE_DURATION_MS = 3000;
-const FADE_DURATION_S = 1;
+const FADE_DURATION_MS = 1000;
 
-export function HeroSlideshow({
-  images,
-  playing = true,
-}: HeroSlideshowProps) {
+export function HeroSlideshow({ images }: HeroSlideshowProps) {
   const prefersReducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
+  const motionEnabled = prefersReducedMotion === false;
 
   useEffect(() => {
-    if (!playing || prefersReducedMotion || images.length <= 1) {
+    if (!motionEnabled || images.length <= 1) {
       return;
     }
 
@@ -29,7 +26,7 @@ export function HeroSlideshow({
     }, SLIDE_DURATION_MS);
 
     return () => window.clearInterval(timer);
-  }, [images.length, playing, prefersReducedMotion]);
+  }, [images.length, motionEnabled]);
 
   return (
     <div className="absolute inset-0 bg-black">
@@ -37,12 +34,13 @@ export function HeroSlideshow({
         const isActive = prefersReducedMotion ? index === 0 : index === activeIndex;
 
         return (
-          <motion.div
+          <div
             key={src}
-            className="absolute inset-0"
-            animate={{ opacity: isActive ? 1 : 0 }}
-            transition={{ duration: FADE_DURATION_S, ease: "easeInOut" }}
             aria-hidden={!isActive}
+            className={`absolute inset-0 transition-opacity ease-in-out ${
+              isActive ? "z-10 opacity-100" : "z-0 opacity-0"
+            }`}
+            style={{ transitionDuration: `${FADE_DURATION_MS}ms` }}
           >
             <Image
               src={src}
@@ -52,7 +50,7 @@ export function HeroSlideshow({
               sizes="100vw"
               className="object-contain object-center"
             />
-          </motion.div>
+          </div>
         );
       })}
     </div>

@@ -81,12 +81,10 @@ export function HeroSection({ introComplete = true }: HeroSectionProps) {
           >
             <source src={recruitSite.hero.videoSrc} type="video/mp4" />
           </video>
+        ) : introComplete ? (
+          <HeroSlideshow images={recruitSite.hero.slideshowImages} />
         ) : (
-          <HeroSlideshow
-            key={introComplete ? "playing" : "waiting"}
-            images={recruitSite.hero.slideshowImages}
-            playing={introComplete}
-          />
+          <div className="absolute inset-0 bg-black" aria-hidden />
         )}
       </div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.22),transparent_28%),linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.88)_100%)]" />
